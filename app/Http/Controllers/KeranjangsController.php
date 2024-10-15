@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreKeranjangsRequest;
 use App\Http\Requests\UpdateKeranjangsRequest;
 use App\Models\Keranjangs;
+use Illuminate\Http\Request;
 
 class KeranjangsController extends Controller
 {
@@ -16,7 +17,7 @@ class KeranjangsController extends Controller
         return Keranjangs::with('product')->get();
     }
 
-    public function store(StoreKeranjangsRequest $request)
+    public function store(Request $request)
     {
         $keranjang = Keranjangs::create($request->all());
         return response()->json($keranjang, 201);
@@ -27,7 +28,7 @@ class KeranjangsController extends Controller
         return Keranjangs::with('product')->findOrFail($id);
     }
 
-    public function update(UpdateKeranjangsRequest $request, $id)
+    public function update(Request $request, $id)
     {
         $keranjang = Keranjangs::findOrFail($id);
         $keranjang->update($request->all());

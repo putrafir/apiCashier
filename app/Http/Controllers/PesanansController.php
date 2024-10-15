@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StorePesanansRequest;
 use App\Http\Requests\UpdatePesanansRequest;
 use App\Models\Pesanans;
+use Illuminate\Http\Request;
 
 class PesanansController extends Controller
 {
@@ -16,7 +17,7 @@ class PesanansController extends Controller
         return Pesanans::with('keranjang.product')->get();
     }
 
-    public function store(StorePesanansRequest $request)
+    public function store(Request $request)
     {
         $pesanan = Pesanans::create($request->all());
         return response()->json($pesanan, 201);
@@ -27,7 +28,7 @@ class PesanansController extends Controller
         return Pesanans::with('keranjang.product')->findOrFail($id);
     }
 
-    public function update(UpdatePesanansRequest $request, $id)
+    public function update(Request $request, $id)
     {
         $pesanan = Pesanans::findOrFail($id);
         $pesanan->update($request->all());
