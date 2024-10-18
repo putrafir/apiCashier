@@ -10,9 +10,17 @@ use Illuminate\Http\Request;
 class ProductsController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        return Products::with('categories')->get();
+        $query = Products::with('categories');
+
+        if ($request->has('categories.nama')) {
+            $query->whereHas('categories', function ($q) use ($request) {
+                $q->where('nama', $request->input('categories.nama'));
+            });
+        }
+
+        return $query->get();
     }
 
     public function store(Request $request)
