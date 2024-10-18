@@ -1,3 +1,4 @@
+
 <?php
 
 use App\Http\Controllers\CategoriesController;
@@ -15,3 +16,6 @@ Route::apiResource('categories', CategoriesController::class);
 Route::apiResource('products', ProductsController::class);
 Route::apiResource('keranjangs', KeranjangsController::class);
 Route::apiResource('pesanans', PesanansController::class);
+Route::get('/test', function () {
+    return 'API is working';
+});

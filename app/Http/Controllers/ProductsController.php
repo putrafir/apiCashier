@@ -12,7 +12,7 @@ class ProductsController extends Controller
 
     public function index()
     {
-        return Products::with('category')->get();
+        return Products::with('categories')->get();
     }
 
     public function store(Request $request)
@@ -23,7 +23,7 @@ class ProductsController extends Controller
 
     public function show($id)
     {
-        return Products::with('category')->findOrFail($id);
+        return Products::with('categories')->findOrFail($id);
     }
 
     public function update(Request $request, $id)
