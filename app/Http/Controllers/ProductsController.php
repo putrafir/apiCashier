@@ -22,7 +22,7 @@ class ProductsController extends Controller
 
 
         $categories = $request->input('categories');
-        $product = Products::whereHas('categories', function ($query) use ($categories) {
+        $product = Products::with('categories')->whereHas('categories', function ($query) use ($categories) {
             $query->where('nama', 'like', '%' . $categories . '%');
         })->get();
 
