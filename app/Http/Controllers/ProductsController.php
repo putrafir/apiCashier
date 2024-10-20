@@ -12,15 +12,21 @@ class ProductsController extends Controller
 
     public function index(Request $request)
     {
-        $query = Products::with('categories');
+        // $categoryName = $request->query('categories.nama');
 
-        if ($request->has('categories.nama')) {
-            $query->whereHas('categories', function ($q) use ($request) {
-                $q->where('nama', $request->input('categories.nama'));
-            });
-        }
+        // $product = Products::with('categories')->when($categoryName, function ($query, $categoryName) {
+        //     $query->whereHas('categories', function ($query) use ($categoryName) {
+        //         $query->where('nama', 'like', '%' . $categoryName . '%');
+        //     });
+        // })->get();
 
-        return $query->get();
+
+        $categories = $request->input('categories');
+        $product = Products::whereHas('categories', function ($query) use ($categories) {
+            $query->where('nama', 'like', '%' . $categories . '%');
+        })->get();
+
+        return response()->json($product);
     }
 
     public function store(Request $request)
