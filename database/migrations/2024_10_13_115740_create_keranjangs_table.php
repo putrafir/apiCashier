@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('product_id')->constrained('products');
             $table->integer('quantity')->default(1);
+            $table->decimal('total_harga', 10, 2); // Menambahkan kolom total_harga
             $table->timestamps();
         });
     }
