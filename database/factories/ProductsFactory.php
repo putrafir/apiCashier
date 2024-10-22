@@ -18,14 +18,8 @@ class ProductsFactory extends Factory
     public function definition(): array
     {
 
-        $this->faker->addProvider(new Restaurant($this->faker));
         return [
-            'kode' => $this->faker->unique()->bothify('MKN-###'),
-            'nama' => $this->faker->foodName(), // Nama makanan acak
-            'harga' => $this->faker->numberBetween(5000, 50000), // Harga acak
-            'is_ready' => $this->faker->boolean(),
-            'gambar' => $this->faker->imageUrl(640, 480, 'food', true), // Gambar acak bertema makanan
-            'category_id' => mt_rand(1, 5), // Hubungkan dengan kategori
+            //
         ];
     }
 }

@@ -14,6 +14,7 @@ class KeranjangsController extends Controller
      */
     public function index()
     {
+
         return Keranjangs::with('product')->get();
     }
 
@@ -25,7 +26,14 @@ class KeranjangsController extends Controller
 
     public function show($id)
     {
-        return Keranjangs::with('product')->findOrFail($id);
+
+        $keranjang = Keranjangs::with('products.categories')->find($id);
+        return response()->json([
+            'jumlah' => $keranjang->jumlah,
+            'total_harga' => $keranjang->total_harga,
+            'product' => $keranjang->product->toArray(),
+            'id' => $keranjang->id
+        ]);
     }
 
     public function update(Request $request, $id)
