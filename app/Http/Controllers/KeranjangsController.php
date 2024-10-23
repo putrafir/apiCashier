@@ -12,10 +12,21 @@ class KeranjangsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+
+        $productId = $request->query('product_id');
+
+        $keranjangs = Keranjangs::with('products.categories')
+            ->when($productId, function ($query, $productId) {
+                return $query->whereHas('products', function ($q) use ($productId) {
+                    $q->where('id', $productId);
+                });
+            })
+            ->get();
+
         return response()->json(
-            Keranjangs::with('products.categories')->get()->map(function ($keranjang) {
+            $keranjangs->map(function ($keranjang) {
                 return [
                     'id' => $keranjang->id,
                     'jumlah' => $keranjang->jumlah,
