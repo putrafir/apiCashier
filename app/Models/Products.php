@@ -13,6 +13,10 @@ class Products extends Model
 
     public function categories()
     {
-        return  $this->belongsTo(categories::class, 'category_id');
+        return  $this->belongsTo(Categories::class, 'category_id');
+    }
+    public function keranjangs()
+    {
+        return $this->hasMany(Keranjangs::class, 'product_id'); // Relasi ke keranjang
     }
 }

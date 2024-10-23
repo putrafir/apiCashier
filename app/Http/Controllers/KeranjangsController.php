@@ -14,8 +14,19 @@ class KeranjangsController extends Controller
      */
     public function index()
     {
+        return response()->json(
+            Keranjangs::with('products.categories')->get()->map(function ($keranjang) {
+                return [
+                    'id' => $keranjang->id,
+                    'jumlah' => $keranjang->jumlah,
+                    'total_harga' => $keranjang->total_harga,
+                    'product' => $keranjang->products->only(['id', 'kode', 'nama', 'harga', 'is_ready', 'gambar']) + [
+                        'category' => $keranjang->products->categories->only(['id', 'nama']),
+                    ],
+                ];
+            })
 
-        return Keranjangs::all();
+        );
     }
 
     public function store(Request $request)
@@ -25,6 +36,7 @@ class KeranjangsController extends Controller
         $product = $request->input('product');
 
         $keranjang = Keranjangs::create([
+            'product_id' => $product['id'],
             'product_name' => $product['nama'],
             'product_image' => $product['gambar'],
             'product_price' => $product['harga'],
