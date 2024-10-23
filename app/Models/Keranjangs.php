@@ -10,4 +10,9 @@ class Keranjangs extends Model
     protected $guarded = ['id'];
 
     use HasFactory;
+
+    public function products()
+    {
+        return $this->hasMany(Products::class);
+    }
 }

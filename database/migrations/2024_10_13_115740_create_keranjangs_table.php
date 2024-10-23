@@ -13,9 +13,11 @@ return new class extends Migration
     {
         Schema::create('keranjangs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained('products');
+            $table->string('product_name');
+            $table->string('product_image');
+            $table->decimal('product_price', 10, 2);
             $table->integer('jumlah')->default(1);
-            $table->decimal('total_harga', 10, 2); // Menambahkan kolom total_harga
+            $table->decimal('total_harga', 10, 2);
             $table->timestamps();
         });
     }
