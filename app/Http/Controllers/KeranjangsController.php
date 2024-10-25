@@ -77,7 +77,11 @@ class KeranjangsController extends Controller
     public function update(Request $request, $id)
     {
         $keranjang = Keranjangs::findOrFail($id);
-        $keranjang->update($request->all());
+        $keranjang->jumlah = $request->input('jumlah', $keranjang->jumlah);
+        $keranjang->total_harga = $request->input('total_harga', $keranjang->total_harga);
+
+        $keranjang->save();
+
         return response()->json($keranjang, 200);
     }
 

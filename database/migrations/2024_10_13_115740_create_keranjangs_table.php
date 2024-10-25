@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('product_image');
             $table->decimal('product_price', 10, 2);
             $table->integer('jumlah')->default(1);
-            $table->decimal('total_harga', 10, 2);
+            $table->integer('total_harga');
             $table->timestamps();
         });
     }
