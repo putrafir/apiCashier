@@ -14,9 +14,6 @@ return new class extends Migration
         Schema::create('keranjangs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
-            $table->string('product_name');
-            $table->string('product_image');
-            $table->decimal('product_price', 10, 2);
             $table->integer('jumlah')->default(1);
             $table->integer('total_harga');
             $table->timestamps();

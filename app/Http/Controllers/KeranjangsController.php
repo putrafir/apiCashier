@@ -12,16 +12,63 @@ class KeranjangsController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+
+    //    public function store(Request $request)
+    // {
+    //     $keranjang = Keranjangs::create([
+    //         'product_id' => $request->input('product.id'),
+    //         'jumlah' => $request->input('jumlah'),
+    //         'total_harga' => $request->input('total_harga'),
+    //     ]);
+
+    //     return response()->json([
+    //         'id' => $keranjang->id,
+    //         'jumlah' => $keranjang->jumlah,
+    //         'total_harga' => $keranjang->total_harga,
+    //         'product' => $request->input('product'), // Jika ingin tetap mengembalikan data produk
+    //     ], 200);
+    // }
+
+
+    // public function indesx(Request $request)
+    // {
+
+    //     $productId = $request->query('product_id');
+
+    //     $keranjangs = Keranjangs::with('products.categories')
+    //         ->when($productId, function ($query, $productId) {
+    //             return $query->whereHas('products', function ($q) use ($productId) {
+    //                 $q->where('id', $productId);
+    //             });
+    //         })
+    //         ->get();
+
+    //     return response()->json(
+    //         $keranjangs->map(function ($keranjang) {
+    //             return [
+    //                 'id' => $keranjang->id,
+    //                 'jumlah' => $keranjang->jumlah,
+    //                 'total_harga' => $keranjang->total_harga,
+    //                 'product' => $keranjang->products->only(['id', 'kode', 'nama', 'harga', 'is_ready', 'gambar']) + [
+    //                     'category' => $keranjang->products->categories->only(['id', 'nama']),
+    //                 ],
+    //             ];
+    //         })
+
+    //     );
+    // }
+
+
+
+
     public function index(Request $request)
     {
-
         $productId = $request->query('product_id');
 
         $keranjangs = Keranjangs::with('products.categories')
             ->when($productId, function ($query, $productId) {
-                return $query->whereHas('products', function ($q) use ($productId) {
-                    $q->where('id', $productId);
-                });
+                return $query->where('product_id', $productId);
             })
             ->get();
 
@@ -36,30 +83,25 @@ class KeranjangsController extends Controller
                     ],
                 ];
             })
-
         );
     }
 
+
+
+
     public function store(Request $request)
     {
-
-
-        $product = $request->input('product');
-
         $keranjang = Keranjangs::create([
-            'product_id' => $product['id'],
-            'product_name' => $product['nama'],
-            'product_image' => $product['gambar'],
-            'product_price' => $product['harga'],
-            'jumlah' => $request->jumlah,
-            'total_harga' => $request->total_harga,
+            'product_id' => $request->input('product.id'),
+            'jumlah' => $request->input('jumlah'),
+            'total_harga' => $request->input('total_harga'),
         ]);
 
         return response()->json([
             'id' => $keranjang->id,
             'jumlah' => $keranjang->jumlah,
             'total_harga' => $keranjang->total_harga,
-            'product' => $product
+            'product' => $request->input('product'), // Jika ingin tetap mengembalikan data produk
         ], 200);
     }
 
