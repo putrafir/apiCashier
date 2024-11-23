@@ -22,6 +22,7 @@ class Pesanans extends Model
     }
     public function keranjangs()
     {
-        return $this->hasMany(Keranjangs::class, 'product_id'); // Relasi ke keranjang
+        return $this->belongsToMany(Keranjangs::class, 'pesanan_id');
     }
 }
+

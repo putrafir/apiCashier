@@ -12,33 +12,25 @@ class PesanansController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
-        // return Pesanans::with('keranjangs.products')->get();
-
-        $keranjangId = $request->query('keranjang_id');
-
-        $pesanans = Pesanans::with('keranjangs.products.categories')->when($keranjangId, function ($query, $keranjangId) {
-            return $query->where('keranjang_id', $keranjangId);
-        })->get();
+        // Ambil semua pesanan dengan keranjangs beserta data relasinya
+        $pesanans = Pesanans::with('keranjangs.products.categories')->get();
 
         return response()->json(
             $pesanans->map(function ($pesanan) {
+                dd($pesanan->keranjangs());
                 return [
-                    'id' => $pesanan->id,
                     'total_bayar' => $pesanan->total_bayar,
                     'menus' => $pesanan->keranjangs->map(function ($keranjang) {
                         return [
                             'jumlah' => $keranjang->jumlah,
                             'total_harga' => $keranjang->total_harga,
                             'product' => $keranjang->products->only(['id', 'kode', 'nama', 'harga', 'is_ready', 'gambar']) + [
-                                'category' => $keranjang->products->categories->only(['id', 'nama'])
+                                'category' => $keranjang->products->categories->only(['id', 'nama']),
                             ],
                         ];
-                    })
-                    // 'menu' => $pesanan->keranjangs->only(['jumlah', 'total_harga']) + [
-                    //     'product' => $pesanan->keranjangs->products->only(['id', 'kode', 'nama', 'harga', 'is_ready', 'gambar'])
-                    // ]
+                    }),
                 ];
             })
         );
@@ -47,23 +39,18 @@ class PesanansController extends Controller
 
     public function store(Request $request)
     {
-        // Validasi input
-        $validatedData = $request->validate([
-            'menus.*.id' => 'required|exists:keranjangs,id',
-            'total_bayar' => 'required|numeric|min:0',
+
+
+        $pesanan = Pesanans::create([
+
+            'total_bayar' => $request->input('total_bayar'),
+
         ]);
-    
-        $pesananList = [];
-        foreach ($validatedData['menus'] as $menu) {
-            $pesananList[] = Pesanans::create([
-                'keranjang_id' => $menu['id'],
-                'total_bayar' => $validatedData['total_bayar'], // Bisa disesuaikan untuk setiap menu
-            ]);
-        }
-    
+
         return response()->json([
-            'pesanan_ids' => array_column($pesananList, 'id'),
-            'total_bayar' => $validatedData['total_bayar'],
+            'id' => $pesanan->id,
+            'total_bayar' => $pesanan->total_bayar,
+            'menus' => $request->input('menus')
         ], 201);
     }
 
