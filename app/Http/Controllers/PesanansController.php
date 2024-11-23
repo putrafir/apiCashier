@@ -19,7 +19,7 @@ class PesanansController extends Controller
 
         return response()->json(
             $pesanans->map(function ($pesanan) {
-                dd($pesanan->keranjangs());
+                // dd($pesanan->keranjangs());
                 return [
                     'total_bayar' => $pesanan->total_bayar,
                     'menus' => $pesanan->keranjangs->map(function ($keranjang) {
@@ -39,18 +39,25 @@ class PesanansController extends Controller
 
     public function store(Request $request)
     {
-
-
-        $pesanan = Pesanans::create([
-
-            'total_bayar' => $request->input('total_bayar'),
-
+        // Validasi input
+        $validatedData = $request->validate([
+            'keranjang_ids' => 'required|array',
+            'keranjang_ids.*' => 'exists:keranjangs,id',
+            'total_bayar' => 'required|numeric|min:0',
         ]);
+
+        // Buat pesanan baru
+        $pesanan = Pesanans::create([
+            'total_bayar' => $validatedData['total_bayar'],
+        ]);
+
+        // Hubungkan keranjang-keranjang ke pesanan melalui tabel pivot
+        $pesanan->keranjangs()->sync($validatedData['keranjang_ids']);
 
         return response()->json([
             'id' => $pesanan->id,
             'total_bayar' => $pesanan->total_bayar,
-            'menus' => $request->input('menus')
+            'keranjang_ids' => $validatedData['keranjang_ids'],
         ], 201);
     }
 
