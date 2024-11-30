@@ -19,3 +19,4 @@ Route::apiResource('pesanans', PesanansController::class);
 Route::get('/test', function () {
     return 'API is working';
 });
+Route::delete('keranjangs', [KeranjangsController::class, 'deleteAllKeranjangs']);

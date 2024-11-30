@@ -9,6 +9,7 @@ class Pesanans extends Model
 {
     protected $guarded = ['id'];
 
+
     use HasFactory;
 
 

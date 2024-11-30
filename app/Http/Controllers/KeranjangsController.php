@@ -127,9 +127,13 @@ class KeranjangsController extends Controller
         return response()->json($keranjang, 200);
     }
 
-    public function destroy($id)
+    public function deleteAllKeranjangs()
     {
-        Keranjangs::destroy($id);
-        return response()->json(null, 204);
+        // Menghapus semua data di tabel keranjangs
+        Keranjangs::truncate();
+
+        return response()->json([
+            'message' => 'Semua data di keranjangs telah dihapus.'
+        ], 200);
     }
 }
